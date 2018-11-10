@@ -186,6 +186,14 @@ var UIController = (function () {
 			document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 
 		},
+		
+		deleteListItem: function(selectorId) {
+			
+			var element = document.getElementById(selectorId);
+			element.parentNode.removeChild(element);
+			
+		},
+		
 
 		clearFields: function () {
 			var fields, fieldsArr;
@@ -209,7 +217,7 @@ var UIController = (function () {
 				document.querySelector(DOMstrings.percentageLabel).textContent 
 				= obj.percentage; + '%'
 			} else {
-				document.querySelector(DOMstrings.percentageLabel).textContent = 'empty';
+				document.querySelector(DOMstrings.percentageLabel).textContent = '-';
 			}
 
 
@@ -294,9 +302,9 @@ var controller = (function (budgetCtrl, UICtrl) {
 			// 1. delete the item from the data structure 
 			budgetCtrl.deleteItem(type, id);
 			// 2. then we delete the item from the ui 
-			
+			UICtrl.deleteListItem(itemId);
 			// 3. then we update and show the new budget 
-			
+			updateBudget();
 		}
 	};
 
