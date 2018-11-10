@@ -42,8 +42,8 @@ var budgetController = (function () {
 			// create new item based on type(지출/수입)
 			if (type === 'exp') {
 				newItem = new Expense(id, des, val);
-			} else if(type === 'inc') newItem = new Income(id, des, val);
-			
+			} else if (type === 'inc') newItem = new Income(id, des, val);
+
 			// push it into data structure(배열)
 			data.allItem[type].push(newItem);
 			// finally return the new element 
@@ -88,16 +88,16 @@ var UIController = (function () {
 			}
 		},
 
-// addListItem 
+		// addListItem 
 
-addListItem: function(obj, type) {
+		addListItem: function (obj, type) {
 
-var html, newHtml, element;
-// create html string with placeholder text
+			var html, newHtml, element;
+			// create html string with placeholder text
 
-if(type === 'inc') {
-  element = DOMstrings.incomeContainer;
-  html = `<div class="item clearfix" id="income-%id%">
+			if (type === 'inc') {
+				element = DOMstrings.incomeContainer;
+				html = `<div class="item clearfix" id="income-%id%">
     <div class="item__description">%description%</div>
     <div class="right clearfix">
     <div class="item__value">%value%</div>
@@ -106,9 +106,9 @@ if(type === 'inc') {
     <i class="ion-ios-close-outline"></i>
     </button></div></div></div>`;
 
-}  else if(type === 'exp') {
-element = DOMstrings.expensesContainer;
-	html = 	`<div class="item clearfix"id="%expense-%id%">
+			} else if (type === 'exp') {
+				element = DOMstrings.expensesContainer;
+				html = `<div class="item clearfix"id="%expense-%id%">
     <div class="item__description">%description%</div>
     <div class="right clearfix">
     <div class="item__value">%value%</div>
@@ -116,20 +116,31 @@ element = DOMstrings.expensesContainer;
 	<div class="item__delete">
 	<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
     </div></div></div>`;
-}
-  
-// replace 
+			}
 
-newHtml = html.replace('%id%', obj.id);
-newHtml = newHtml.replace('%description%', obj.description);
-newHtml = newHtml.replace('%value%', obj.value);
+			// replace 
 
-// insert it into the dom => jsonhtmlmethod
-document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+			newHtml = html.replace('%id%', obj.id);
+			newHtml = newHtml.replace('%description%', obj.description);
+			newHtml = newHtml.replace('%value%', obj.value);
 
+			// insert it into the dom => jsonhtmlmethod
+			document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 
+		},
 
-},
+		clearFields: function () {
+			var fields, fieldsArr;
+
+		fields = document.querySelectorAll(DOMstrings.inputDesc + ',' + DOMstrings.inputVal);
+		fieldsArr = Array.prototype.slice.call(fields);
+	// callback function 
+		fieldsArr.forEach(function(current, index, array) {
+				current.value = "";
+			});
+			fieldsArr[0].focus();
+		},
+
 		getDOMstrings: function () {
 			return DOMstrings;
 		}
@@ -169,6 +180,9 @@ var controller = (function (budgetCtrl, UICtrl) {
 		newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 		// 3. add the Item to user Interfact as well
 		UICtrl.addListItem(newItem, input.type);
+
+		// 3-1. clear the fields. 
+		UICtrl.clearFields();
 
 		// 4. in budgetController calculate budget =>
 
