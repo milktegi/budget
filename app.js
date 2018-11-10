@@ -1,5 +1,5 @@
 
-// Budget Controller
+///////////////// Budget Controller
 var budgetController = (function () {
 	// function constructor to store userdata 
 	var Expense = function (id, description, value) {
@@ -59,7 +59,7 @@ var budgetController = (function () {
 
 })();
 
-// UI Controller
+//////////////// UI Controller
 var UIController = (function () {
 
 	// central strings 
@@ -67,7 +67,9 @@ var UIController = (function () {
 		inputType: '.add__type',
 		inputDesc: '.add__description',
 		inputVal: '.add__value',
-		inputButton: '.add__btn'
+		inputButton: '.add__btn',
+		incomeContainer: '.income__list',
+		expensesContainer: '.expenses__list',
 	}
 
 
@@ -86,6 +88,48 @@ var UIController = (function () {
 			}
 		},
 
+// addListItem 
+
+addListItem: function(obj, type) {
+
+var html, newHtml, element;
+// create html string with placeholder text
+
+if(type === 'inc') {
+  element = DOMstrings.incomeContainer;
+  html = `<div class="item clearfix" id="income-%id%">
+    <div class="item__description">%description%</div>
+    <div class="right clearfix">
+    <div class="item__value">%value%</div>
+    <div class="item__delete">
+	<button class="item__delete--btn">
+    <i class="ion-ios-close-outline"></i>
+    </button></div></div></div>`;
+
+}  else if(type === 'exp') {
+element = DOMstrings.expensesContainer;
+	html = 	`<div class="item clearfix"id="%expense-%id%">
+    <div class="item__description">%description%</div>
+    <div class="right clearfix">
+    <div class="item__value">%value%</div>
+	<div class="item__percentage">21%</div>
+	<div class="item__delete">
+	<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
+    </div></div></div>`;
+}
+  
+// replace 
+
+newHtml = html.replace('%id%', obj.id);
+newHtml = newHtml.replace('%description%', obj.description);
+newHtml = newHtml.replace('%value%', obj.value);
+
+// insert it into the dom => jsonhtmlmethod
+document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+
+
+
+},
 		getDOMstrings: function () {
 			return DOMstrings;
 		}
@@ -93,7 +137,7 @@ var UIController = (function () {
 
 })();
 
-// Global App Controller
+//////////// Global App Controller
 var controller = (function (budgetCtrl, UICtrl) {
 
 	// model can receive arguments
@@ -124,6 +168,7 @@ var controller = (function (budgetCtrl, UICtrl) {
 		// 2. add the Item to the budget controller
 		newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 		// 3. add the Item to user Interfact as well
+		UICtrl.addListItem(newItem, input.type);
 
 		// 4. in budgetController calculate budget =>
 
