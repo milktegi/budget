@@ -63,6 +63,20 @@ var budgetController = (function () {
 			return newItem;
 
 		},
+		
+		// 삭제 아이템 데이터에서 제거 
+		deleteItem: function(type, id) {
+		
+			// create an array filled with all ids and remove the index of an id
+			var ids = data.allItems[type].map(current => {
+				return current.id;
+			});	
+			var index = ids.indexOf(id);
+			if(index !== -1) {
+				data.allItems[type].splice(index, 1);
+			}
+		},
+		
 
 		calculateBudget: function () {
 
@@ -274,11 +288,11 @@ var controller = (function (budgetCtrl, UICtrl) {
 		if(itemId) {
 	
 			//inc-1
-		var	splitId = itemID.split('-');
+		var	splitId = itemId.split('-');
 		var	type = splitId[0];
-		var	id = splitId[1];
+		var	id = parseInt(splitId[1]);
 			// 1. delete the item from the data structure 
-			
+			budgetCtrl.deleteItem(type, id);
 			// 2. then we delete the item from the ui 
 			
 			// 3. then we update and show the new budget 
