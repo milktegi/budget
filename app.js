@@ -29,12 +29,11 @@ var budgetController = (function () {
 	return {
 
 		addItem: function (type, des, val) {
-			var newItem;
-			var id = 0;
+			var newItem, id;
 
 			// creare new id 
 			if (data.allItem[type].length > 0) {
-				id = data.allItems[type][data.allItems[type].length - 1].id++;
+				id = data.allItems[type][data.allItems[type].length - 1].id + 1;
 			} else {
 				id = 0;
 			}
@@ -43,9 +42,8 @@ var budgetController = (function () {
 			// create new item based on type(지출/수입)
 			if (type === 'exp') {
 				newItem = new Expense(id, des, val);
-			} else if (type === 'inc') {
-				newItem = new Income(id, des, val);
-			}
+			} else if(type === 'inc') newItem = new Income(id, des, val);
+			
 			// push it into data structure(배열)
 			data.allItem[type].push(newItem);
 			// finally return the new element 
@@ -124,7 +122,7 @@ var controller = (function (budgetCtrl, UICtrl) {
 		// not just from clicking but also pressing the enter key 
 
 		// 2. add the Item to the budget controller
-		var newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+		newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 		// 3. add the Item to user Interfact as well
 
 		// 4. in budgetController calculate budget =>
