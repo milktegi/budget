@@ -176,6 +176,14 @@ var UIController = (function () {
 				return (type === 'exp' ? sign ='-' : sign= '+') + ' ' + int;
 		};
 
+		var nodeListForEach = function(list, callback) {
+
+			for(var i = 0; i < list.length; i++) {
+				callback(list[i], i);
+			}
+		};
+
+
 	// return an object
 	return {
 		getInput: function () {
@@ -275,13 +283,6 @@ var UIController = (function () {
 
 			var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
 
-		var nodeListForEach = function(list, callback) {
-
-			for(var i = 0; i < list.length; i++) {
-				callback(list[i], i);
-			}
-		}
-
 		nodeListForEach(fields, function(current, index){
 
 			if(percentages[index] > 0) {
@@ -311,8 +312,24 @@ var UIController = (function () {
 
 		// + or - before the number 
 		// comma seperating manipulate Strings 1,000,000
-	
 
+		changedType: function() {
+
+			// add or remove css classes 
+			var fields = document.querySelectorAll(
+				DOMstrings.inputType + ',' +
+				DOMstrings.inputDesc + ',' + 
+				DOMstrings.inputVal
+			);
+
+			nodeListForEach(fields, function(current){
+
+				current.classList.toggle('red-focus');
+			});
+
+		document.querySelector(DOMstrings.inputButton).classList.toggle('red');
+
+		},
 
 		getDOMstrings: function () {
 			return DOMstrings;
@@ -338,6 +355,8 @@ var controller = (function (budgetCtrl, UICtrl) {
 		});
 		// implement delete 
 		document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+		// manipulating input field color from default to red when it expenses
+		document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
 
 	};
 
